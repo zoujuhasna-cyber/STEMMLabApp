@@ -11,18 +11,26 @@ interface ExperimentCardProps {
 
 const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment, onPress }) => {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity
+        style={styles.card}
+        onPress={onPress}
+        activeOpacity={Number(0.7)}
+    >
       <View style={styles.iconContainer}>
-        <Ionicons name={experiment.icon as any} size={32} color={Colors.primary} />
+        <Ionicons
+            name={String(experiment.icon || 'flask') as any}
+            size={Number(30)}
+            color={Colors.primary}
+        />
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.category}>{experiment.category}</Text>
-        <Text style={styles.title}>{experiment.title}</Text>
-        <Text style={styles.description} numberOfLines={2}>
-          {experiment.description}
+        <Text style={styles.category}>{String(experiment.category)}</Text>
+        <Text style={styles.title}>{String(experiment.title)}</Text>
+        <Text style={styles.description} numberOfLines={Number(2)}>
+          {String(experiment.description)}
         </Text>
       </View>
-      <Ionicons name="chevron-forward" size={20} color={Colors.border} />
+      <Ionicons name="chevron-forward" size={Number(20)} color={Colors.border} />
     </TouchableOpacity>
   );
 };
@@ -30,44 +38,42 @@ const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment, onPress }) 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.card,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: Number(12),
+    paddingTop: Number(15),
+    paddingBottom: Number(15),
+    paddingLeft: Number(15),
+    paddingRight: Number(15),
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
+    marginBottom: Number(12),
+    borderWidth: Number(1),
+    borderColor: '#EEEEEE',
   },
   iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 12,
+    width: Number(55),
+    height: Number(55),
+    borderRadius: Number(10),
     backgroundColor: '#F0F7FF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: Number(15),
   },
   textContainer: {
-    flex: 1,
+    flex: Number(1),
   },
   category: {
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: Number(12),
     color: Colors.primary,
     textTransform: 'uppercase',
-    marginBottom: 4,
+    marginBottom: Number(4),
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: Number(18),
     color: Colors.text,
-    marginBottom: 4,
+    marginBottom: Number(4),
   },
   description: {
-    fontSize: 14,
+    fontSize: Number(14),
     color: Colors.textLight,
   },
 });

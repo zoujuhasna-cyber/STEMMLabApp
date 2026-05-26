@@ -15,7 +15,6 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any;
-
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Experiments') {
@@ -25,8 +24,7 @@ const TabNavigator = () => {
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
           }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={Number(size)} color={color} />;
         },
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.textLight,
@@ -34,8 +32,8 @@ const TabNavigator = () => {
           backgroundColor: Colors.card,
         },
         headerTitleStyle: {
-          fontWeight: 'bold',
           color: Colors.text,
+          // Removed fontWeight entirely
         },
       })}
     >

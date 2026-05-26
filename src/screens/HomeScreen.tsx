@@ -5,38 +5,10 @@ import ExperimentCard from '../components/ExperimentCard';
 import { Experiment } from '../types';
 
 const featuredExperiments: Experiment[] = [
-  {
-    id: '1',
-    title: 'Reaction Time',
-    description: 'Test your reflexes! How fast can you tap?',
-    icon: 'timer-outline',
-    route: 'ReactionTime',
-    category: 'Physics',
-  },
-  {
-    id: '2',
-    title: 'Earthquake Sensor',
-    description: 'Measure vibrations using the accelerometer.',
-    icon: 'pulse-outline',
-    route: 'Earthquake',
-    category: 'Earth Science',
-  },
-  {
-    id: '3',
-    title: 'Sound Meter',
-    description: 'Measure ambient noise levels in decibels.',
-    icon: 'volume-high-outline',
-    route: 'SoundMeter',
-    category: 'Acoustics',
-  },
-  {
-    id: '4',
-    title: 'Breathing Tracker',
-    description: 'Track your breathing rhythm using motion sensors.',
-    icon: 'heart-outline',
-    route: 'BreathingTracker',
-    category: 'Biology',
-  },
+  { id: '1', title: 'Reaction Time', description: 'Test reflexes!', icon: 'timer-outline', route: 'ReactionTime', category: 'Physics' },
+  { id: '2', title: 'Earthquake Sensor', description: 'Measure vibrations.', icon: 'pulse-outline', route: 'Earthquake', category: 'Earth Science' },
+  { id: '3', title: 'Sound Meter', description: 'Measure noise.', icon: 'volume-high-outline', route: 'SoundMeter', category: 'Acoustics' },
+  { id: '4', title: 'Breathing Tracker', description: 'Track rhythm.', icon: 'heart-outline', route: 'BreathingTracker', category: 'Biology' },
 ];
 
 const HomeScreen = ({ navigation }: any) => {
@@ -44,12 +16,12 @@ const HomeScreen = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Welcome, Scientist!</Text>
-          <Text style={styles.subtitle}>Ready for today's experiment?</Text>
+          <Text style={styles.greeting}>Welcome!</Text>
+          <Text style={styles.subtitle}>Ready for an experiment?</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Featured Experiments</Text>
+          <Text style={styles.sectionTitle}>Featured</Text>
           {featuredExperiments.map((item) => (
             <ExperimentCard
               key={item.id}
@@ -61,9 +33,7 @@ const HomeScreen = ({ navigation }: any) => {
 
         <View style={styles.infoCard}>
           <Text style={styles.infoTitle}>Scientific Tip</Text>
-          <Text style={styles.infoText}>
-            Always record your data multiple times to get the most accurate results!
-          </Text>
+          <Text style={styles.infoText}>Always record data multiple times!</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -72,53 +42,55 @@ const HomeScreen = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: Colors.background,
+    flex: Number(1),
+    backgroundColor: Colors.background
   },
   scrollContent: {
-    padding: 20,
+    paddingTop: Number(20),
+    paddingBottom: Number(20),
+    paddingLeft: Number(20),
+    paddingRight: Number(20)
   },
   header: {
-    marginBottom: 25,
-    marginTop: 10,
+    marginBottom: Number(20),
+    marginTop: Number(10)
   },
   greeting: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: Colors.text,
+    fontSize: Number(28),
+    fontWeight: '700',
+    color: Colors.text
   },
   subtitle: {
-    fontSize: 16,
-    color: Colors.textLight,
-    marginTop: 5,
+    fontSize: Number(16),
+    color: Colors.textLight
   },
   section: {
-    marginBottom: 20,
+    marginBottom: Number(20)
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: Number(20),
+    fontWeight: '700',
     color: Colors.text,
-    marginBottom: 15,
+    marginBottom: Number(15)
   },
   infoCard: {
     backgroundColor: Colors.primary,
-    borderRadius: 15,
-    padding: 20,
-    marginTop: 10,
-    marginBottom: 30,
+    borderRadius: Number(15),
+    paddingTop: Number(20),
+    paddingBottom: Number(20),
+    paddingLeft: Number(20),
+    paddingRight: Number(20),
+    marginBottom: Number(30)
   },
   infoTitle: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
+    color: '#FFFFFF',
+    fontSize: Number(18),
+    fontWeight: '700',
+    marginBottom: Number(8)
   },
   infoText: {
-    color: '#FFF',
-    fontSize: 14,
-    lineHeight: 20,
-    opacity: 0.9,
+    color: '#FFFFFF',
+    fontSize: Number(14)
   },
 });
 
