@@ -5,15 +5,15 @@ import { saveResult } from '../database/dbService';
 
 const ReactionTimeScreen = () => {
   const [gameState, setGameState] = useState<'idle' | 'waiting' | 'active' | 'result'>('idle');
-  const [startTime, setStartTime] = useState(Number(0));
-  const [reactionTime, setReactionTime] = useState(Number(0));
-  const [timerHandle, setTimerHandle] = useState<any>(null);
+  const [startTime, setStartTime] = useState(0);
+  const [reactionTime, setReactionTime] = useState<number | null>(null);
+  const [timerHandle, setTimerHandle] = useState<NodeJS.Timeout | null>(null);
 
   const startTest = () => {
     setGameState('waiting');
-    setReactionTime(Number(0));
+    setReactionTime(null);
 
-    const delay = Math.floor(Math.random() * Number(3000)) + Number(2000);
+    const delay = Math.floor(Math.random() * 3000) + 2000; // 2-5 seconds
     const timeout = setTimeout(() => {
       setGameState('active');
       setStartTime(Date.now());
@@ -25,20 +25,25 @@ const ReactionTimeScreen = () => {
   const handlePress = () => {
     if (gameState === 'waiting') {
       if (timerHandle) clearTimeout(timerHandle);
-      Alert.alert('Too early!', 'Wait for green!');
+      Alert.alert('Too early!', 'Wait for the color to change to green.');
       setGameState('idle');
     } else if (gameState === 'active') {
-      const diff = Date.now() - startTime;
-      const safeDiff = Number.isFinite(diff) ? diff : Number(0);
-      setReactionTime(Number(safeDiff));
+      const endTime = Date.now();
+      const diff = endTime - startTime;
+      setReactionTime(diff);
       setGameState('result');
-      saveResult('Reaction Time', `${safeDiff} ms`);
+
+      // Save the result to local storage (SQLite)
+      saveResult('Reaction Time', `${diff} ms`);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Reaction Time</Text>
+      <Text style={styles.title}>Reaction Time Test</Text>
+      <Text style={styles.description}>
+        Tap "Start", then tap the screen as fast as you can when it turns GREEN!
+      </Text>
 
       <TouchableOpacity
         style={[
@@ -48,7 +53,7 @@ const ReactionTimeScreen = () => {
         ]}
         onPress={handlePress}
         disabled={gameState === 'idle' || gameState === 'result'}
-        activeOpacity={Number(1.0)}
+        activeOpacity={1}
       >
         {gameState === 'idle' && (
           <TouchableOpacity style={styles.button} onPress={startTest}>
@@ -56,14 +61,20 @@ const ReactionTimeScreen = () => {
           </TouchableOpacity>
         )}
 
-        {gameState === 'waiting' && <Text style={styles.statusText}>Wait...</Text>}
-        {gameState === 'active' && <Text style={styles.statusText}>TAP!</Text>}
+        {gameState === 'waiting' && (
+          <Text style={styles.statusText}>Wait for it...</Text>
+        )}
+
+        {gameState === 'active' && (
+          <Text style={styles.statusText}>TAP NOW!</Text>
+        )}
 
         {gameState === 'result' && (
           <View style={styles.resultContainer}>
-            <Text style={styles.resultValue}>{Number(reactionTime)} ms</Text>
+            <Text style={styles.resultLabel}>Your Time:</Text>
+            <Text style={styles.resultValue}>{reactionTime} ms</Text>
             <TouchableOpacity style={styles.button} onPress={startTest}>
-              <Text style={styles.buttonText}>RETRY</Text>
+              <Text style={styles.buttonText}>TRY AGAIN</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -74,39 +85,71 @@ const ReactionTimeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: Number(1),
+    flex: 1,
     backgroundColor: Colors.background,
-    padding: Number(20),
-    alignItems: 'center'
+    padding: 20,
+    alignItems: 'center',
   },
   title: {
-    fontSize: Number(24),
+    fontSize: 24,
+    fontWeight: 'bold',
     color: Colors.text,
-    marginTop: Number(10)
+    marginTop: 20,
+  },
+  description: {
+    fontSize: 16,
+    color: Colors.textLight,
+    textAlign: 'center',
+    marginVertical: 20,
   },
   gameArea: {
-    alignSelf: 'stretch', // Changed from width: '100%'
-    flex: Number(1),
+    width: '100%',
+    flex: 1,
     backgroundColor: Colors.card,
-    borderRadius: Number(20),
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: Number(20),
-    borderWidth: Number(1),
-    borderColor: '#EEEEEE'
+    borderWidth: 2,
+    borderColor: Colors.border,
   },
-  waiting: { backgroundColor: '#FFD54F' },
-  active: { backgroundColor: '#66BB6A' },
-  statusText: { fontSize: Number(32), color: '#FFFFFF' },
+  waiting: {
+    backgroundColor: '#FFE082', // Yellow/Amber
+  },
+  active: {
+    backgroundColor: '#81C784', // Green
+  },
+  statusText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#FFF',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
   button: {
     backgroundColor: Colors.primary,
-    paddingHorizontal: Number(40),
-    paddingVertical: Number(15),
-    borderRadius: Number(30)
+    paddingHorizontal: 40,
+    paddingVertical: 15,
+    borderRadius: 30,
   },
-  buttonText: { color: '#FFFFFF', fontSize: Number(20) },
-  resultContainer: { alignItems: 'center' },
-  resultValue: { fontSize: Number(50), color: Colors.primary, marginVertical: Number(20) },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  resultContainer: {
+    alignItems: 'center',
+  },
+  resultLabel: {
+    fontSize: 24,
+    color: Colors.text,
+  },
+  resultValue: {
+    fontSize: 64,
+    fontWeight: 'bold',
+    color: Colors.primary,
+    marginVertical: 20,
+  },
 });
 
 export default ReactionTimeScreen;
