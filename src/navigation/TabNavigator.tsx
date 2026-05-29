@@ -5,6 +5,8 @@ import HomeScreen from '../screens/HomeScreen';
 import ExperimentsScreen from '../screens/ExperimentsScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import MapScreen from '../screens/MapScreen';
+import ProjectInfoScreen from '../screens/ProjectInfoScreen';
 import { Colors } from '../constants/Colors';
 
 const Tab = createBottomTabNavigator();
@@ -21,26 +23,27 @@ const TabNavigator = () => {
             iconName = focused ? 'flask' : 'flask-outline';
           } else if (route.name === 'History') {
             iconName = focused ? 'time' : 'time-outline';
+          } else if (route.name === 'Map') {
+            iconName = focused ? 'map' : 'map-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
+          } else if (route.name === 'Docs') {
+            iconName = focused ? 'document-text' : 'document-text-outline';
           }
           return <Ionicons name={iconName} size={Number(size)} color={color} />;
         },
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.textLight,
-        headerStyle: {
-          backgroundColor: Colors.card,
-        },
-        headerTitleStyle: {
-          color: Colors.text,
-          // Removed fontWeight entirely
-        },
+        headerStyle: { backgroundColor: Colors.card },
+        headerTitleStyle: { color: Colors.text },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'STEMM Lab' }} />
-      <Tab.Screen name="Experiments" component={ExperimentsScreen} options={{ title: 'Experiments' }} />
-      <Tab.Screen name="History" component={HistoryScreen} options={{ title: 'History' }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+      <Tab.Screen name="Experiments" component={ExperimentsScreen} options={{ title: 'All Labs' }} />
+      <Tab.Screen name="History" component={HistoryScreen} options={{ title: 'Logbook' }} />
+      <Tab.Screen name="Map" component={MapScreen} options={{ title: 'Field Map' }} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Scientist' }} />
+      <Tab.Screen name="Docs" component={ProjectInfoScreen} options={{ title: 'Report' }} />
     </Tab.Navigator>
   );
 };

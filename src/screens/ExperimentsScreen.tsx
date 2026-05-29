@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors';
 import ExperimentCard from '../components/ExperimentCard';
 import { Experiment } from '../types';
@@ -8,7 +9,7 @@ const allExperiments: Experiment[] = [
   {
     id: '1',
     title: 'Reaction Time',
-    description: 'Measure your response speed.',
+    description: 'Measure your response speed to visual stimuli.',
     icon: 'timer-outline',
     route: 'ReactionTime',
     category: 'Physics',
@@ -16,7 +17,7 @@ const allExperiments: Experiment[] = [
   {
     id: '2',
     title: 'Earthquake Sensor',
-    description: 'Monitor vibrations.',
+    description: 'Monitor vibrations and seismic activity using the accelerometer.',
     icon: 'pulse-outline',
     route: 'Earthquake',
     category: 'Earth Science',
@@ -24,7 +25,7 @@ const allExperiments: Experiment[] = [
   {
     id: '3',
     title: 'Sound Meter',
-    description: 'Measure ambient noise levels.',
+    description: 'Measure ambient noise levels in decibels.',
     icon: 'volume-high-outline',
     route: 'SoundMeter',
     category: 'Acoustics',
@@ -32,10 +33,18 @@ const allExperiments: Experiment[] = [
   {
     id: '4',
     title: 'Breathing Tracker',
-    description: 'Track your breathing rhythm.',
+    description: 'Track your breathing rhythm using motion sensors.',
     icon: 'heart-outline',
     route: 'BreathingTracker',
     category: 'Biology',
+  },
+  {
+    id: '5',
+    title: 'Optical Lab',
+    description: 'Use the device LED for light and optics experiments.',
+    icon: 'flash-outline',
+    route: 'Flashlight',
+    category: 'Optics',
   },
 ];
 
@@ -54,8 +63,8 @@ const ExperimentsScreen = ({ navigation }: any) => {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={() => (
           <View style={styles.header}>
-            <Text style={styles.title}>All Experiments</Text>
-            <Text style={styles.subtitle}>Select a lab to begin</Text>
+            <Text style={styles.title}>All Labs</Text>
+            <Text style={styles.subtitle}>Select a laboratory station to begin.</Text>
           </View>
         )}
       />
@@ -76,7 +85,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: Number(24),
-    fontWeight: '700', // Changed from 'bold'
+    fontWeight: '700',
     color: Colors.text,
   },
   subtitle: {

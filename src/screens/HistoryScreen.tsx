@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
-import { getAllResults } from '../database/dbService';
+import { getAllResults, clearAllResults } from '../database/dbService';
 
 const HistoryScreen = () => {
   const [results, setResults] = useState<any[]>([]);
@@ -21,6 +21,27 @@ const HistoryScreen = () => {
     if (isFocused) loadResults();
   }, [isFocused]);
 
+  const handleClearHistory = () => {
+    Alert.alert(
+      'Clear History',
+      'Are you sure you want to delete all experiment results?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear All',
+          style: 'destructive',
+          onPress: async () => {
+            const success = await clearAllResults();
+            if (success) {
+              setResults([]);
+              Alert.alert('History Cleared');
+            }
+          }
+        },
+      ]
+    );
+  };
+
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.resultItem}>
       <View style={styles.itemContent}>
@@ -38,12 +59,20 @@ const HistoryScreen = () => {
   return (
     <View style={styles.container}>
       {results.length > 0 ? (
-        <FlatList
-          data={results}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listContent}
-        />
+        <>
+          <FlatList
+            data={results}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContent}
+          />
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={handleClearHistory}
+          >
+            <Text style={styles.clearButtonText}>Clear All History</Text>
+          </TouchableOpacity>
+        </>
       ) : (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>No history yet.</Text>
@@ -103,6 +132,18 @@ const styles = StyleSheet.create({
     fontSize: Number(16),
     color: '#777777'
   },
+  clearButton: {
+    backgroundColor: Colors.error,
+    margin: Number(20),
+    padding: Number(15),
+    borderRadius: Number(10),
+    alignItems: 'center',
+  },
+  clearButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: Number(16),
+  }
 });
 
 export default HistoryScreen;

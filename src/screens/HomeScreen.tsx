@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors';
 import ExperimentCard from '../components/ExperimentCard';
 import { Experiment } from '../types';
@@ -16,12 +17,11 @@ const HomeScreen = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Welcome!</Text>
+          <Text style={styles.greeting}>Welcome Scientist!</Text>
           <Text style={styles.subtitle}>Ready for an experiment?</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Featured</Text>
           {featuredExperiments.map((item) => (
             <ExperimentCard
               key={item.id}
@@ -31,9 +31,10 @@ const HomeScreen = ({ navigation }: any) => {
           ))}
         </View>
 
-        <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Scientific Tip</Text>
-          <Text style={styles.infoText}>Always record data multiple times!</Text>
+        {/* AdMob Placeholder Requirement */}
+        <View style={styles.adBanner}>
+          <Text style={styles.adText}>ADVERTISEMENT BANNER</Text>
+          <Text style={styles.adSubtext}>(AdMob Integration Ready)</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -41,57 +42,26 @@ const HomeScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: Number(1),
-    backgroundColor: Colors.background
+  container: { flex: Number(1), backgroundColor: Colors.background },
+  scrollContent: { padding: Number(20) },
+  header: { marginBottom: Number(20), marginTop: Number(10) },
+  greeting: { fontSize: Number(28), fontWeight: '700', color: Colors.text },
+  subtitle: { fontSize: Number(16), color: Colors.textLight },
+  section: { marginBottom: Number(20) },
+  adBanner: {
+    backgroundColor: '#E0E0E0',
+    height: Number(60),
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: Number(8),
+    marginTop: Number(10),
+    borderStyle: 'dashed',
+    borderWidth: Number(1),
+    borderColor: '#999999'
   },
-  scrollContent: {
-    paddingTop: Number(20),
-    paddingBottom: Number(20),
-    paddingLeft: Number(20),
-    paddingRight: Number(20)
-  },
-  header: {
-    marginBottom: Number(20),
-    marginTop: Number(10)
-  },
-  greeting: {
-    fontSize: Number(28),
-    fontWeight: '700',
-    color: Colors.text
-  },
-  subtitle: {
-    fontSize: Number(16),
-    color: Colors.textLight
-  },
-  section: {
-    marginBottom: Number(20)
-  },
-  sectionTitle: {
-    fontSize: Number(20),
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: Number(15)
-  },
-  infoCard: {
-    backgroundColor: Colors.primary,
-    borderRadius: Number(15),
-    paddingTop: Number(20),
-    paddingBottom: Number(20),
-    paddingLeft: Number(20),
-    paddingRight: Number(20),
-    marginBottom: Number(30)
-  },
-  infoTitle: {
-    color: '#FFFFFF',
-    fontSize: Number(18),
-    fontWeight: '700',
-    marginBottom: Number(8)
-  },
-  infoText: {
-    color: '#FFFFFF',
-    fontSize: Number(14)
-  },
+  adText: { color: '#666666', fontWeight: '700', fontSize: Number(12) },
+  adSubtext: { color: '#999999', fontSize: Number(10) }
 });
 
 export default HomeScreen;

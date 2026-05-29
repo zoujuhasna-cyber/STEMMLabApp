@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { saveResult } from '../database/dbService';
 
-// We try to import Audio safely
-let Audio: any;
+// Safely import Audio for Android
+let Audio: any = null;
 try {
   Audio = require('expo-av').Audio;
 } catch (e) {
-  Audio = null;
+  console.log('Audio module not found');
 }
 
 const SoundMeterScreen = () => {
@@ -17,53 +17,47 @@ const SoundMeterScreen = () => {
   const [volume, setVolume] = useState(Number(0));
   const [maxVolume, setMaxVolume] = useState(Number(0));
 
-  const isSupported = !!Audio;
+  const isSensorAvailable = !!Audio;
 
   async function startMeasuring() {
-    if (!isSupported) {
-      Alert.alert('Not Supported', 'The Sound Meter requires a native module that is not available.');
+    if (!isSensorAvailable) {
+      Alert.alert('Sensor Missing', 'Android Microphone module not ready.');
       return;
     }
 
     try {
       const permission = await Audio.requestPermissionsAsync();
       if (permission.status !== 'granted') {
-        Alert.alert('Permission Denied', 'Microphone access is required.');
+        Alert.alert('Permission Denied', 'Android Microphone access required.');
         return;
       }
 
-      await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
+      // Android-only configuration
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false, // Explicitly disabled for focus
+      });
 
       const { recording: newRecording } = await Audio.Recording.createAsync(
         {
-            android: {
-                extension: '.m4a',
-                outputFormat: Number(2),
-                audioEncoder: Number(3),
-                sampleRate: Number(44100),
-                numberOfChannels: Number(2),
-                bitRate: Number(128000),
-            },
-            ios: {
-                extension: '.m4a',
-                audioQuality: Number(127),
-                sampleRate: Number(44100),
-                numberOfChannels: Number(2),
-                bitRate: Number(128000),
-                linearPCMBitDepth: Number(16),
-                linearPCMIsBigEndian: false,
-                linearPCMIsFloat: false,
-            },
-            web: {}
+          android: {
+            extension: '.m4a',
+            outputFormat: 2,
+            audioEncoder: 3,
+            sampleRate: 44100,
+            numberOfChannels: 2,
+            bitRate: 128000,
+          },
+          ios: {}, // Removed iOS settings
+          web: {}
         },
         (status: any) => {
-          if (status && status.metering !== undefined) {
-            const db = Math.floor(Math.max(Number(0), Number(status.metering) + 160) / 1.6);
+          if (status.metering !== undefined) {
+            const db = Math.floor(Math.max(0, status.metering + 160) / 1.6);
             setVolume(Number(db));
-            setMaxVolume((prev: number) => Math.max(Number(prev), Number(db)));
+            setMaxVolume((prev) => Math.max(Number(prev), Number(db)));
           }
         },
-        Number(100)
+        100
       );
 
       setRecording(newRecording);
@@ -71,7 +65,7 @@ const SoundMeterScreen = () => {
       setMaxVolume(Number(0));
     } catch (err) {
       console.error(err);
-      Alert.alert('Error', 'Could not start measurement.');
+      Alert.alert('Android Error', 'Could not start the sound sensor.');
     }
   }
 
@@ -81,7 +75,7 @@ const SoundMeterScreen = () => {
     try {
       await recording.stopAndUnloadAsync();
       setRecording(null);
-      saveResult('Sound Meter', `Max: ${maxVolume} dB`);
+      saveResult('Sound Meter', `${maxVolume} dB`);
     } catch (error) {
       console.error(error);
     }
@@ -89,100 +83,47 @@ const SoundMeterScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sound Pollution Meter</Text>
+      <Text style={styles.title}>Android Acoustic Lab</Text>
 
-      {!isSupported && (
+      {!isSensorAvailable && (
         <View style={styles.warningBox}>
-          <Text style={styles.warningText}>⚠️ Native Module Missing</Text>
+          <Text style={styles.warningText}>⚠️ Android Hardware Sync Required</Text>
         </View>
       )}
 
       <View style={styles.meterContainer}>
-        <View style={[styles.circle, { borderColor: isMeasuring ? '#F44336' : Colors.border }]}>
+        <View style={[styles.circle, { borderColor: isMeasuring ? Colors.error : Colors.border }]}>
           <Text style={styles.dbValue}>{Number(isMeasuring ? volume : maxVolume)}</Text>
           <Text style={styles.dbUnit}>dB</Text>
         </View>
+        <Text style={styles.statusText}>{isMeasuring ? 'SAMPLING...' : 'READY'}</Text>
       </View>
 
       <TouchableOpacity
-        style={[styles.button, isMeasuring ? styles.stopButton : styles.startButton]}
+        style={[styles.button, isMeasuring ? styles.stopButton : styles.startButton, !isSensorAvailable && { opacity: 0.5 }]}
         onPress={isMeasuring ? stopMeasuring : startMeasuring}
-        disabled={!isSupported}
+        disabled={!isSensorAvailable}
       >
-        <Text style={styles.buttonText}>
-          {isMeasuring ? 'STOP' : 'START'}
-        </Text>
+        <Text style={styles.buttonText}>{isMeasuring ? 'STOP' : 'START'}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: Number(1),
-    backgroundColor: Colors.background,
-    padding: Number(20),
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: Number(22),
-    fontWeight: '700',
-    color: Colors.text,
-    marginTop: Number(10)
-  },
-  warningBox: {
-    backgroundColor: '#FFEBEE',
-    padding: Number(10),
-    borderRadius: Number(8),
-    marginTop: Number(10),
-    width: '100%'
-  },
-  warningText: {
-    color: '#C62828',
-    fontWeight: '700',
-    textAlign: 'center'
-  },
-  meterContainer: {
-    alignItems: 'center',
-    marginVertical: Number(40)
-  },
-  circle: {
-    width: Number(180),
-    height: Number(180),
-    borderRadius: Number(90),
-    borderWidth: Number(10),
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.card,
-    // REMOVED elevation
-  },
-  dbValue: {
-    fontSize: Number(48),
-    fontWeight: '700',
-    color: Colors.text
-  },
-  dbUnit: {
-    fontSize: Number(18),
-    color: Colors.textLight
-  },
-  button: {
-    width: '100%',
-    padding: Number(18),
-    borderRadius: Number(12),
-    alignItems: 'center',
-    marginVertical: Number(20)
-  },
-  startButton: {
-    backgroundColor: Colors.primary
-  },
-  stopButton: {
-    backgroundColor: Colors.error
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: Number(18),
-    fontWeight: '700'
-  },
+  container: { flex: 1, backgroundColor: Colors.background, padding: 20, alignItems: 'center' },
+  title: { fontSize: 22, fontWeight: '700', color: Colors.text, marginTop: 10 },
+  warningBox: { backgroundColor: '#FFEBEE', padding: 10, borderRadius: 8, marginTop: 10, width: '100%' },
+  warningText: { color: '#C62828', fontWeight: '700', textAlign: 'center' },
+  meterContainer: { alignItems: 'center', marginVertical: 40 },
+  circle: { width: 180, height: 180, borderRadius: 90, borderWidth: 8, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.card },
+  dbValue: { fontSize: 48, fontWeight: '700', color: Colors.text },
+  dbUnit: { fontSize: 18, color: Colors.textLight },
+  statusText: { marginTop: 15, fontWeight: '700', color: Colors.primary },
+  button: { alignSelf: 'stretch', padding: 18, borderRadius: 12, alignItems: 'center', marginVertical: 20 },
+  startButton: { backgroundColor: Colors.primary },
+  stopButton: { backgroundColor: Colors.error },
+  buttonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
 });
 
 export default SoundMeterScreen;
