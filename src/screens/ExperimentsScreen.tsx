@@ -8,7 +8,7 @@ const allExperiments: Experiment[] = [
   {
     id: '1',
     title: 'Reaction Time',
-    description: 'Measure your response speed to visual stimuli.',
+    description: 'Measure your response speed.',
     icon: 'timer-outline',
     route: 'ReactionTime',
     category: 'Physics',
@@ -16,7 +16,7 @@ const allExperiments: Experiment[] = [
   {
     id: '2',
     title: 'Earthquake Sensor',
-    description: 'Monitor vibrations and seismic activity using the accelerometer.',
+    description: 'Monitor vibrations.',
     icon: 'pulse-outline',
     route: 'Earthquake',
     category: 'Earth Science',
@@ -24,7 +24,7 @@ const allExperiments: Experiment[] = [
   {
     id: '3',
     title: 'Sound Meter',
-    description: 'Measure ambient noise levels in decibels.',
+    description: 'Measure ambient noise levels.',
     icon: 'volume-high-outline',
     route: 'SoundMeter',
     category: 'Acoustics',
@@ -32,7 +32,7 @@ const allExperiments: Experiment[] = [
   {
     id: '4',
     title: 'Breathing Tracker',
-    description: 'Track your breathing rhythm using motion sensors.',
+    description: 'Track your breathing rhythm.',
     icon: 'heart-outline',
     route: 'BreathingTracker',
     category: 'Biology',
@@ -44,7 +44,7 @@ const ExperimentsScreen = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={allExperiments}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <ExperimentCard
             experiment={item}
@@ -55,7 +55,7 @@ const ExperimentsScreen = ({ navigation }: any) => {
         ListHeaderComponent={() => (
           <View style={styles.header}>
             <Text style={styles.title}>All Experiments</Text>
-            <Text style={styles.subtitle}>Select a lab to begin your exploration</Text>
+            <Text style={styles.subtitle}>Select a lab to begin</Text>
           </View>
         )}
       />
@@ -65,24 +65,24 @@ const ExperimentsScreen = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: Number(1),
     backgroundColor: Colors.background,
   },
   listContent: {
-    padding: 20,
+    padding: Number(20),
   },
   header: {
-    marginBottom: 20,
+    marginBottom: Number(20),
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: Number(24),
+    fontWeight: '700', // Changed from 'bold'
     color: Colors.text,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: Number(14),
     color: Colors.textLight,
-    marginTop: 4,
+    marginTop: Number(4),
   },
 });
 

@@ -11,29 +11,29 @@ const EarthquakeScreen = () => {
   const [maxVibration, setMaxVibration] = useState(0);
 
   const _subscribe = () => {
+    Accelerometer.setUpdateInterval(100);
     setSubscription(
-      Accelerometer.addListener(accelerometerData => {
-        setData(accelerometerData);
+      Accelerometer.addListener(accelData => {
+        const x = Number(accelData.x) || 0;
+        const y = Number(accelData.y) || 0;
+        const z = Number(accelData.z) || 0;
+        setData({ x, y, z });
 
-        // Calculate total acceleration (vibration intensity)
-        const intensity = Math.sqrt(
-          accelerometerData.x ** 2 +
-          accelerometerData.y ** 2 +
-          accelerometerData.z ** 2
-        ) - 1; // Subtract 1g (gravity)
+        const rawIntensity = Math.sqrt(x ** 2 + y ** 2 + z ** 2) - 1;
+        const absoluteIntensity = Math.abs(rawIntensity);
 
-        const absoluteIntensity = Math.abs(intensity);
         if (absoluteIntensity > maxVibration) {
           setMaxVibration(absoluteIntensity);
         }
       })
     );
-    Accelerometer.setUpdateInterval(100);
   };
 
   const _unsubscribe = () => {
-    subscription && subscription.remove();
-    setSubscription(null);
+    if (subscription) {
+      subscription.remove();
+      setSubscription(null);
+    }
   };
 
   const toggleMeasuring = () => {
@@ -51,25 +51,27 @@ const EarthquakeScreen = () => {
     return () => _unsubscribe();
   }, [subscription]);
 
+  const currentVibration = Math.abs(Math.sqrt(data.x**2 + data.y**2 + data.z**2) - 1);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Vibration / Earthquake Sensor</Text>
-      <Text style={styles.description}>
-        Place your phone on a flat surface to measure vibrations.
-      </Text>
+      <Text style={styles.title}>Earthquake Sensor</Text>
+
+      <View style={styles.placeholderBox}>
+        <Text style={styles.placeholderText}>Vibration Monitor Active</Text>
+        <Text style={styles.liveValue}>{currentVibration.toFixed(3)} g</Text>
+      </View>
 
       <View style={styles.sensorContainer}>
         <View style={styles.valueBox}>
-          <Text style={styles.valueLabel}>Current Vibration</Text>
-          <Text style={styles.valueText}>
-            {(Math.sqrt(data.x**2 + data.y**2 + data.z**2) - 1).toFixed(2)}
-          </Text>
+          <Text style={styles.valueLabel}>Current</Text>
+          <Text style={styles.valueText}>{currentVibration.toFixed(2)}</Text>
           <Text style={styles.unitText}>g-force</Text>
         </View>
 
         <View style={styles.valueBox}>
-          <Text style={styles.valueLabel}>Maximum Detected</Text>
-          <Text style={[styles.valueText, { color: Colors.primary }]}>
+          <Text style={styles.valueLabel}>Max</Text>
+          <Text style={[styles.valueText, { color: Colors.error }]}>
             {maxVibration.toFixed(2)}
           </Text>
           <Text style={styles.unitText}>g-force</Text>
@@ -79,18 +81,12 @@ const EarthquakeScreen = () => {
       <TouchableOpacity
         style={[styles.button, isMeasuring ? styles.stopButton : styles.startButton]}
         onPress={toggleMeasuring}
+        activeOpacity={0.8}
       >
         <Text style={styles.buttonText}>
-          {isMeasuring ? 'STOP & SAVE' : 'START MEASURING'}
+          {isMeasuring ? 'STOP' : 'START'}
         </Text>
       </TouchableOpacity>
-
-      <View style={styles.infoBox}>
-        <Text style={styles.infoTitle}>What are you measuring?</Text>
-        <Text style={styles.infoText}>
-          The accelerometer detects tiny movements. 0.01g is a light vibration, while 0.5g+ is a strong shake!
-        </Text>
-      </View>
     </View>
   );
 };
@@ -100,81 +96,53 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     padding: 20,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
     color: Colors.text,
-    marginTop: 10,
+    marginTop: 10
   },
-  description: {
-    fontSize: 14,
-    color: Colors.textLight,
-    textAlign: 'center',
-    marginVertical: 15,
+  placeholderBox: {
+    alignSelf: 'stretch', // Changed from width: '100%'
+    height: 150,
+    backgroundColor: '#F0F4F8',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+    borderWidth: 1,
+    borderColor: '#D1D9E6'
   },
+  placeholderText: { color: Colors.textLight, fontSize: 16 },
+  liveValue: { fontSize: 24, color: Colors.primary, marginTop: 10 },
   sensorContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
-    marginVertical: 20,
+    alignSelf: 'stretch', // Use stretch instead of width: '100%'
+    marginBottom: 20
   },
   valueBox: {
     backgroundColor: Colors.card,
-    padding: 20,
+    padding: 15,
     borderRadius: 15,
-    width: '48%',
-    alignItems: 'center',
-    elevation: 2,
+    flex: 1, // Use flex instead of width: '48%'
+    marginHorizontal: 5,
+    alignItems: 'center'
   },
-  valueLabel: {
-    fontSize: 12,
-    color: Colors.textLight,
-    marginBottom: 5,
-  },
-  valueText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: Colors.text,
-  },
-  unitText: {
-    fontSize: 12,
-    color: Colors.textLight,
-  },
+  valueLabel: { fontSize: 12, color: Colors.textLight, marginBottom: 5 },
+  valueText: { fontSize: 28, color: Colors.text },
+  unitText: { fontSize: 12, color: Colors.textLight },
   button: {
-    width: '100%',
+    alignSelf: 'stretch',
     padding: 18,
     borderRadius: 12,
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 10
   },
-  startButton: {
-    backgroundColor: Colors.primary,
-  },
-  stopButton: {
-    backgroundColor: Colors.error,
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  infoBox: {
-    backgroundColor: '#E1F5FE',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  infoTitle: {
-    fontWeight: 'bold',
-    color: '#0288D1',
-    marginBottom: 5,
-  },
-  infoText: {
-    fontSize: 13,
-    color: '#0277BD',
-  }
+  startButton: { backgroundColor: Colors.primary },
+  stopButton: { backgroundColor: Colors.error },
+  buttonText: { color: '#FFFFFF', fontSize: 18 },
 });
 
 export default EarthquakeScreen;

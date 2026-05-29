@@ -1,43 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
-import { LineChart } from 'react-native-chart-kit';
 import { Colors } from '../constants/Colors';
 import { saveResult } from '../database/dbService';
 
-
 const BreathingTrackerScreen = () => {
-  const [data, setData] = useState<number[]>(new Array(20).fill(0));
+  const [data, setData] = useState<number[]>(new Array(Number(20)).fill(Number(0)));
   const [subscription, setSubscription] = useState<any>(null);
   const [isTracking, setIsTracking] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
 
   const _subscribe = () => {
+    Accelerometer.setUpdateInterval(Number(200));
     setSubscription(
       Accelerometer.addListener(accelData => {
-        // We focus on the Z axis (up/down movement when phone is on chest)
-        const zValue = accelData.z;
+        const rawZ = Number(accelData.z);
+        const zValue = Number.isFinite(rawZ) ? rawZ : Number(0);
+
         setData(prevData => {
           const newData = [...prevData, zValue];
-          return newData.slice(-20); // Keep last 20 points for the graph
+          return newData.slice(Number(-20));
         });
       })
     );
-    Accelerometer.setUpdateInterval(200);
   };
 
   const _unsubscribe = () => {
-    subscription && subscription.remove();
-    setSubscription(null);
+    if (subscription) {
+      subscription.remove();
+      setSubscription(null);
+    }
   };
 
   const toggleTracking = () => {
     if (isTracking) {
       _unsubscribe();
-      const duration = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0;
-      saveResult('Breathing Tracker', `Tracked for ${duration}s`);
+      const duration = startTime ? Math.floor((Date.now() - startTime) / Number(1000)) : Number(0);
+      saveResult('Breathing Tracker', `${duration}s duration`);
     } else {
       setStartTime(Date.now());
+      setData(new Array(Number(20)).fill(Number(0)));
       _subscribe();
     }
     setIsTracking(!isTracking);
@@ -50,29 +52,13 @@ const BreathingTrackerScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Breathing Pace Tracker</Text>
-      <Text style={styles.description}>
-        Lie down and place the phone on your chest. Breathe naturally to see your rhythm.
-      </Text>
 
-      <View style={styles.chartContainer}>
-        <LineChart
-          data={{
-            labels: [],
-            datasets: [{ data: data }]
-          }}
-          width={Dimensions.get('window').width - 40}
-          height={220}
-          chartConfig={{
-            backgroundColor: Colors.card,
-            backgroundGradientFrom: Colors.card,
-            backgroundGradientTo: Colors.card,
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(74, 144, 226, ${opacity})`,
-            style: { borderRadius: 16 }
-          }}
-          bezier
-          style={styles.chart}
-        />
+      {/* TEMPORARY: Chart removed to isolate "String to Double" error */}
+      <View style={styles.placeholderBox}>
+        <Text style={styles.placeholderText}>Motion Tracking Active</Text>
+        <Text style={styles.liveValue}>
+            {Number(data[data.length - 1]).toFixed(3)}
+        </Text>
       </View>
 
       <TouchableOpacity
@@ -83,79 +69,62 @@ const BreathingTrackerScreen = () => {
           {isTracking ? 'STOP TRACKING' : 'START TRACKING'}
         </Text>
       </TouchableOpacity>
-
-      <View style={styles.instructionBox}>
-        <Text style={styles.instructionTitle}>How it works:</Text>
-        <Text style={styles.instructionText}>
-          The graph shows your chest moving up and down. A steady wave indicates calm, regular breathing.
-        </Text>
-      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: Number(1),
     backgroundColor: Colors.background,
-    padding: 20,
-    alignItems: 'center',
+    padding: Number(20),
+    alignItems: 'center'
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: Number(22),
+    fontWeight: '700',
     color: Colors.text,
-    marginTop: 10,
+    marginTop: Number(10)
   },
-  description: {
-    fontSize: 14,
+  placeholderBox: {
+    width: '100%',
+    height: Number(200),
+    backgroundColor: '#F0F4F8',
+    borderRadius: Number(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: Number(20),
+    borderWidth: Number(1),
+    borderColor: '#D1D9E6'
+  },
+  placeholderText: {
     color: Colors.textLight,
-    textAlign: 'center',
-    marginVertical: 15,
+    fontSize: Number(16)
   },
-  chartContainer: {
-    marginVertical: 20,
-    borderRadius: 16,
-    overflow: 'hidden',
-    elevation: 3,
-  },
-  chart: {
-    borderRadius: 16,
+  liveValue: {
+    fontSize: Number(32),
+    fontWeight: '700',
+    color: Colors.primary,
+    marginTop: Number(10)
   },
   button: {
     width: '100%',
-    padding: 18,
-    borderRadius: 12,
+    padding: Number(18),
+    borderRadius: Number(12),
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: Number(10)
   },
   startButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primary
   },
   stopButton: {
-    backgroundColor: Colors.error,
+    backgroundColor: Colors.error
   },
   buttonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: Number(18),
+    fontWeight: '700'
   },
-  instructionBox: {
-    backgroundColor: '#E8F5E9',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
-    width: '100%',
-  },
-  instructionTitle: {
-    fontWeight: 'bold',
-    color: '#2E7D32',
-    marginBottom: 5,
-  },
-  instructionText: {
-    fontSize: 13,
-    color: '#1B5E20',
-  }
 });
 
 export default BreathingTrackerScreen;

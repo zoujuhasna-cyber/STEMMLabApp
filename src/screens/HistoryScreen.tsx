@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
 import { getAllResults } from '../database/dbService';
@@ -9,23 +9,29 @@ const HistoryScreen = () => {
   const isFocused = useIsFocused();
 
   const loadResults = async () => {
-    const data = await getAllResults();
-    setResults(data);
+    try {
+      const data = await getAllResults();
+      setResults(data || []);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
-    if (isFocused) {
-      loadResults();
-    }
+    if (isFocused) loadResults();
   }, [isFocused]);
 
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.resultItem}>
-      <View style={styles.resultHeader}>
-        <Text style={styles.experimentName}>{item.experimentName}</Text>
-        <Text style={styles.timestamp}>{item.timestamp}</Text>
+      <View style={styles.itemContent}>
+        <View style={styles.resultHeader}>
+          <Text style={styles.experimentName}>{String(item.experimentName)}</Text>
+          <Text style={styles.timestamp}>{String(item.timestamp).split(',')[0]}</Text>
+        </View>
+        <Text style={styles.scoreText}>
+            Result: <Text style={styles.scoreValue}>{String(item.score)}</Text>
+        </Text>
       </View>
-      <Text style={styles.scoreText}>Result: <Text style={styles.scoreValue}>{item.score}</Text></Text>
     </View>
   );
 
@@ -34,14 +40,13 @@ const HistoryScreen = () => {
       {results.length > 0 ? (
         <FlatList
           data={results}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}
           contentContainerStyle={styles.listContent}
         />
       ) : (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No experiment history yet.</Text>
-          <Text style={styles.emptySubtext}>Try an experiment to see results here!</Text>
+          <Text style={styles.emptyText}>No history yet.</Text>
         </View>
       )}
     </View>
@@ -50,64 +55,53 @@ const HistoryScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: Colors.background,
+    flex: Number(1),
+    backgroundColor: Colors.background
   },
   listContent: {
-    padding: 20,
+    padding: Number(20)
   },
   resultItem: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    backgroundColor: '#FFFFFF',
+    borderRadius: Number(12),
+    padding: Number(15),
+    marginBottom: Number(10),
+    borderWidth: Number(1),
+    borderColor: '#EEEEEE'
+  },
+  itemContent: {
+    flex: Number(1)
   },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Number(5)
   },
   experimentName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: Colors.text,
+    fontSize: Number(15),
+    fontWeight: '700'
   },
   timestamp: {
-    fontSize: 12,
-    color: Colors.textLight,
+    fontSize: Number(11),
+    color: '#777777'
   },
   scoreText: {
-    fontSize: 14,
-    color: Colors.text,
+    fontSize: Number(13),
+    color: '#555555'
   },
   scoreValue: {
-    fontWeight: 'bold',
-    color: Colors.primary,
-    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.primary
   },
   emptyContainer: {
-    flex: 1,
+    flex: Number(1),
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
+    marginTop: Number(100)
   },
   emptyText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: Colors.text,
-    textAlign: 'center',
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: Colors.textLight,
-    textAlign: 'center',
-    marginTop: 8,
+    fontSize: Number(16),
+    color: '#777777'
   },
 });
 

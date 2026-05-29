@@ -13,14 +13,16 @@ const RootNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
+        headerShadowVisible: false,
         headerStyle: {
           backgroundColor: Colors.card,
         },
         headerTitleStyle: {
-          fontWeight: 'bold',
           color: Colors.text,
+          fontSize: Number(18),
         },
         headerTintColor: Colors.primary,
+        headerTitleAlign: 'center',
       }}
     >
       <Stack.Screen
@@ -31,17 +33,17 @@ const RootNavigator = () => {
       <Stack.Screen
         name="ReactionTime"
         component={ReactionTimeScreen}
-        options={{ title: 'Reaction Time Test' }}
+        options={{ title: 'Reaction Time' }}
       />
       <Stack.Screen
         name="Earthquake"
         component={EarthquakeScreen}
-        options={{ title: 'Earthquake Sensor' }}
+        options={{ title: 'Earthquake' }}
       />
       <Stack.Screen
         name="BreathingTracker"
         component={BreathingTrackerScreen}
-        options={{ title: 'Breathing Tracker' }}
+        options={{ title: 'Breathing' }}
       />
       <Stack.Screen
         name="SoundMeter"
