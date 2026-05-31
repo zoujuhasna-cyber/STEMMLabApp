@@ -20,7 +20,12 @@
         "android.permission.CAMERA",
         "android.permission.FOREGROUND_SERVICE"
       ],
-      "package": "com.student.stemmlab",
+      "package": "com.lab.stemmlab",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBYlfpsaEWoYknFRNvazcAv678QHWdburM"
+        }
+      },
       "predictiveBackGestureEnabled": false
     },
     "plugins": [

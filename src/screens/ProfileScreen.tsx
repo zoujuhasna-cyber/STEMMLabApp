@@ -34,7 +34,7 @@ const ProfileScreen = () => {
         });
       }
 
-      // 2. Fetch Battery Status (Device Capability Requirement)
+      // 2. Fetch Battery Status
       const level = await Battery.getBatteryLevelAsync();
       setBatteryLevel(level);
     } catch (e) {
@@ -60,7 +60,7 @@ const ProfileScreen = () => {
     >
       <View style={styles.header}>
         <Ionicons name="person-circle" size={100} color={Colors.primary} />
-        <Text style={styles.name}>Student Scientist</Text>
+        <Text style={styles.name}>Lead Scientist</Text>
         <Text style={styles.email}>{user?.email || 'Guest User'}</Text>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleSignOut}>
@@ -79,7 +79,6 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      {/* Device Capabilities Section */}
       <View style={styles.infoSection}>
         <Text style={styles.sectionTitle}>Device Status</Text>
 
@@ -103,7 +102,7 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>STEMM Lab v1.0 - Student Project</Text>
+        <Text style={styles.footerText}>STEMM Lab v1.0</Text>
       </View>
     </ScrollView>
   );

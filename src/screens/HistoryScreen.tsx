@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
-import { getAllResults, clearAllResults } from '../database/dbService';
+import { getAllResults, clearAllResults, exportResultsToCSV } from '../database/dbService';
 
 const HistoryScreen = () => {
   const [results, setResults] = useState<any[]>([]);
@@ -42,6 +42,13 @@ const HistoryScreen = () => {
     );
   };
 
+  const handleExportCSV = async () => {
+    const success = await exportResultsToCSV();
+    if (success) {
+      Alert.alert("Success", "Experiment data exported to CSV successfully.");
+    }
+  };
+
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.resultItem}>
       <View style={styles.itemContent}>
@@ -66,12 +73,22 @@ const HistoryScreen = () => {
             renderItem={renderItem}
             contentContainerStyle={styles.listContent}
           />
-          <TouchableOpacity
-            style={styles.clearButton}
-            onPress={handleClearHistory}
-          >
-            <Text style={styles.clearButtonText}>Clear All History</Text>
-          </TouchableOpacity>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.exportButton}
+              onPress={handleExportCSV}
+            >
+              <Text style={styles.buttonText}>Export to CSV</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={handleClearHistory}
+            >
+              <Text style={styles.buttonText}>Clear History</Text>
+            </TouchableOpacity>
+          </View>
         </>
       ) : (
         <View style={styles.emptyContainer}>
@@ -132,17 +149,29 @@ const styles = StyleSheet.create({
     fontSize: Number(16),
     color: '#777777'
   },
-  clearButton: {
-    backgroundColor: Colors.error,
-    margin: Number(20),
+  buttonContainer: {
+    padding: Number(20),
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  exportButton: {
+    backgroundColor: Colors.success,
+    flex: Number(0.48),
     padding: Number(15),
     borderRadius: Number(10),
     alignItems: 'center',
   },
-  clearButtonText: {
+  clearButton: {
+    backgroundColor: Colors.error,
+    flex: Number(0.48),
+    padding: Number(15),
+    borderRadius: Number(10),
+    alignItems: 'center',
+  },
+  buttonText: {
     color: '#FFFFFF',
     fontWeight: '700',
-    fontSize: Number(16),
+    fontSize: Number(14),
   }
 });
 

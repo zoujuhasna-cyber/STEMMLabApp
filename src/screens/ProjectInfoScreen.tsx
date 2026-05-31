@@ -10,7 +10,7 @@ const ProjectInfoScreen = () => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>1. Firebase Integration</Text>
         <Text style={styles.body}>
-          Firebase was selected for this project to provide secure Student Authentication and real-time
+          Firebase was selected for this project to provide secure Authentication and real-time
           Cloud Synchronization. Cloud Firestore allows experiment results to be backed up and
           accessed across different devices.
         </Text>
@@ -20,7 +20,7 @@ const ProjectInfoScreen = () => {
         <Text style={styles.sectionTitle}>2. Local Storage (SQLite)</Text>
         <Text style={styles.body}>
           A Relational Database (SQLite) was implemented to ensure "Reliable Data Storage" even without
-          an internet connection. This allows students to conduct field experiments in remote locations.
+          an internet connection. This allows users to conduct field experiments in remote locations.
         </Text>
       </View>
 
@@ -41,7 +41,7 @@ const ProjectInfoScreen = () => {
         </Text>
       </View>
 
-      <Text style={styles.footer}>Individual Student Assessment - STEMM Lab</Text>
+      <Text style={styles.footer}>Professional Technical Assessment - STEMM Lab</Text>
     </ScrollView>
   );
 };

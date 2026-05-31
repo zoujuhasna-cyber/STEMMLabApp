@@ -7,7 +7,7 @@ const BACKGROUND_SYNC_TASK = 'background-lab-sync';
 TaskManager.defineTask(BACKGROUND_SYNC_TASK, async () => {
   try {
     console.log('Background Sync: Parallel Programming Requirement Triggered');
-    // In a student project, this simulates syncing data in a separate thread
+    // Simulates syncing data in a separate thread for data integrity
     const now = Date.now();
     console.log(`[Parallel Thread] Background check performed at ${new Date(now).toLocaleTimeString()}`);
 

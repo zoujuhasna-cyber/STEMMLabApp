@@ -1,4 +1,4 @@
-// Simple student-level test for the assignment rubric
+// Core logic validation tests for the laboratory modules
 declare const describe: (name: string, fn: () => void) => void;
 declare const test: (name: string, fn: () => void) => void;
 declare const expect: (value: unknown) => { toBe: (expected: unknown) => void; toContain: (expected: string) => void };

@@ -2,11 +2,11 @@ import * as SQLite from 'expo-sqlite';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db as firestoreDb, auth } from '../services/firebaseConfig';
 import { Alert } from 'react-native';
-import * as FileSystem from 'expo-file-system/legacy';
+import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
 /**
- * STUDENT ASSIGNMENT COMPLIANCE NOTE (Android Focus):
+ * COMPLIANCE NOTE (Android Focus):
  * This service fulfills mandatory Android development requirements:
  * 1. RELATIONAL DATABASE (SQLite): Local persistent storage on Android device.
  * 2. FIREBASE INTEGRATION: Cloud synchronization with Firestore.
@@ -19,7 +19,6 @@ const sqliteDb = SQLite.openDatabaseSync('stemm_labs.db');
 
 /**
  * Initializes the database schema.
- * Hits the "Reliable data storage and retrieval (SQLite)" requirement.
  */
 export const initDatabase = async () => {
   try {
@@ -39,19 +38,18 @@ export const initDatabase = async () => {
 
 /**
  * Saves lab results to both local and cloud storage.
- * Hits "Integration of Firebase" and "Relational Database" requirements.
  */
 export const saveResult = async (experimentName: string, score: string) => {
   const timestamp = new Date().toLocaleString();
 
   try {
-    // A. LOCAL SAVE (Requirement: SQLite)
+    // A. LOCAL SAVE
     await sqliteDb.runAsync(
       'INSERT INTO results (experimentName, score, timestamp) VALUES (?, ?, ?)',
       [experimentName, score, timestamp]
     );
 
-    // B. CLOUD SYNC (Requirement: Firebase Firestore)
+    // B. CLOUD SYNC
     if (auth.currentUser) {
       try {
         await addDoc(collection(firestoreDb, "lab_results"), {
@@ -68,8 +66,7 @@ export const saveResult = async (experimentName: string, score: string) => {
       }
     }
 
-    // C. USER NOTIFICATION (Requirement: Notifications)
-    // Alert.alert ensures 100% stability on Android devices in Expo Go SDK 56.
+    // C. USER NOTIFICATION
     Alert.alert(
       "🧪 Lab Result Recorded",
       `${experimentName}: ${score}\nStored locally and synced to cloud.`
@@ -93,7 +90,6 @@ export const getAllResults = async () => {
 
 /**
  * ADVANCED FEATURE: Exporting Data to CSV
- * Fulfills the requirement for an "Advanced mobile feature."
  */
 export const exportResultsToCSV = async () => {
   try {
@@ -122,7 +118,7 @@ export const exportResultsToCSV = async () => {
 };
 
 /**
- * Cleanup function for the Android student demo.
+ * Cleanup function for the laboratory demo.
  */
 export const clearAllResults = async () => {
   try {
