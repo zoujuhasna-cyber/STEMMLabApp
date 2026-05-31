@@ -6,7 +6,6 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
 /**
- * PRODUCTION NOTE:
  * This service implements a Hybrid Storage Architecture for the technical assessment:
  * 1. RELATIONAL DATABASE (SQLite): Local persistent storage for offline reliability.
  * 2. FIREBASE INTEGRATION: Cloud synchronization using Firestore.
