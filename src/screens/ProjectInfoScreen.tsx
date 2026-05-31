@@ -5,40 +5,38 @@ import { Colors } from '../constants/Colors';
 const ProjectInfoScreen = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Project Documentation</Text>
+      <Text style={styles.title}>Project Summary</Text>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>1. Firebase Integration</Text>
-        <Text style={styles.body}>
-          Firebase was selected for this project to provide secure Authentication and real-time
-          Cloud Synchronization. Cloud Firestore allows experiment results to be backed up and
-          accessed across different devices.
-        </Text>
+        <Text style={styles.sectionTitle}>Key Technologies</Text>
+        <Text style={styles.point}>• Firebase: Secure Auth and Cloud Sync.</Text>
+        <Text style={styles.point}>• SQLite: Reliable local data storage.</Text>
+        <Text style={styles.point}>• Expo Sensors: Real-time hardware access.</Text>
+        <Text style={styles.point}>• Google Maps: Live GPS tracking.</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>2. Local Storage (SQLite)</Text>
-        <Text style={styles.body}>
-          A Relational Database (SQLite) was implemented to ensure "Reliable Data Storage" even without
-          an internet connection. This allows users to conduct field experiments in remote locations.
-        </Text>
+        <Text style={styles.sectionTitle}>Lab Modules</Text>
+        <Text style={styles.point}>• Reaction Time: Measures reflex speed.</Text>
+        <Text style={styles.point}>• Seismograph: Monitors vibrations.</Text>
+        <Text style={styles.point}>• Breathing: Tracks respiratory rhythm.</Text>
+        <Text style={styles.point}>• Optical Lab: Controls hardware torch.</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>3. Parallel Programming</Text>
-        <Text style={styles.body}>
-          The app uses Background Fetch and Task Manager to simulate parallel processing.
-          This background thread handles data synchronization without interrupting the main UI thread.
-        </Text>
+        <Text style={styles.sectionTitle}>Advanced Features</Text>
+        <Text style={styles.point}>• Parallelism: Background data syncing.</Text>
+        <Text style={styles.point}>• Data Export: CSV sharing via native sheet.</Text>
+        <Text style={styles.point}>• Notifications: Instant user feedback.</Text>
+        <Text style={styles.point}>• Battery Level: Real-time device monitoring.</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>4. Reflection & Limitations</Text>
-        <Text style={styles.body}>
-          Development focused on hardware-software synergy. A primary limitation was the strict
-          typing requirements of the experimental Expo v56 engine on Android. Future improvements
-          would include more complex data visualization and real AdMob monetization.
-        </Text>
+        <Text style={styles.sectionTitle}>Reflection & Limitations</Text>
+        <Text style={styles.point}>• Built on experimental Expo SDK 56.</Text>
+        <Text style={styles.point}>• Used strict numeric styles for stability.</Text>
+        <Text style={styles.point}>• Offline-first design for field research.</Text>
+        <Text style={styles.point}>• Scalable cloud architecture via Firestore.</Text>
       </View>
 
       <Text style={styles.footer}>Professional Technical Assessment - STEMM Lab</Text>
@@ -50,9 +48,16 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   content: { padding: 20 },
   title: { fontSize: 24, fontWeight: '700', color: Colors.primary, marginBottom: 20 },
-  section: { backgroundColor: Colors.card, padding: 15, borderRadius: 12, marginBottom: 15, borderWidth: 1, borderColor: '#EEE' },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: Colors.text, marginBottom: 8 },
-  body: { fontSize: 14, color: Colors.textLight, lineHeight: 20 },
+  section: {
+    backgroundColor: Colors.card,
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#EEEEEE'
+  },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: Colors.text, marginBottom: 10 },
+  point: { fontSize: 14, color: Colors.textLight, marginBottom: 5, lineHeight: 20 },
   footer: { textAlign: 'center', marginTop: 20, color: Colors.textLight, fontSize: 12, fontStyle: 'italic' }
 });
 

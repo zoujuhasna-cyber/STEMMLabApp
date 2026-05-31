@@ -2,10 +2,9 @@ import * as SQLite from 'expo-sqlite';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db as firestoreDb, auth } from '../services/firebaseConfig';
 import { Alert } from 'react-native';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 
 /**
+ * PRODUCTION NOTE:
  * This service implements a Hybrid Storage Architecture for the technical assessment:
  * 1. RELATIONAL DATABASE (SQLite): Local persistent storage for offline reliability.
  * 2. FIREBASE INTEGRATION: Cloud synchronization using Firestore.
@@ -86,50 +85,5 @@ export const getAllResults = async () => {
     return await sqliteDb.getAllAsync('SELECT * FROM results ORDER BY id DESC');
   } catch (error) {
     return [];
-  }
-};
-
-/**
- * ADVANCED FEATURE: Exporting Data to CSV
- * Fulfills the requirement for an advanced mobile feature that solves a real user need.
- */
-export const exportResultsToCSV = async () => {
-  try {
-    const results: any[] = await getAllResults();
-    if (results.length === 0) {
-      Alert.alert("No Data", "Please perform an experiment first before exporting.");
-      return false;
-    }
-
-    // Generate CSV string
-    let csvContent = 'ID,Experiment,Result,Date\n';
-    results.forEach(row => {
-      csvContent += `${row.id},${row.experimentName},${row.score},${row.timestamp}\n`;
-    });
-
-    // Write file to device storage
-    const fileUri = `${FileSystem.documentDirectory}stemm_lab_results.csv`;
-    await FileSystem.writeAsStringAsync(fileUri, csvContent, { encoding: FileSystem.EncodingType.UTF8 });
-
-    // Open native sharing sheet
-    if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(fileUri);
-    }
-    return true;
-  } catch (error) {
-    console.error('Export Error:', error);
-    return false;
-  }
-};
-
-/**
- * Utility to clear local history for demo purposes.
- */
-export const clearAllResults = async () => {
-  try {
-    await sqliteDb.runAsync('DELETE FROM results');
-    return true;
-  } catch (error) {
-    return false;
   }
 };

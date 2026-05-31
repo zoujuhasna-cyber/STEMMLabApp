@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
-import { getAllResults, clearAllResults, exportResultsToCSV } from '../database/dbService';
+import { getAllResults } from '../database/dbService';
 
 const HistoryScreen = () => {
   const [results, setResults] = useState<any[]>([]);
@@ -21,34 +21,6 @@ const HistoryScreen = () => {
     if (isFocused) loadResults();
   }, [isFocused]);
 
-  const handleClearHistory = () => {
-    Alert.alert(
-      'Clear History',
-      'Are you sure you want to delete all experiment results?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear All',
-          style: 'destructive',
-          onPress: async () => {
-            const success = await clearAllResults();
-            if (success) {
-              setResults([]);
-              Alert.alert('History Cleared');
-            }
-          }
-        },
-      ]
-    );
-  };
-
-  const handleExportCSV = async () => {
-    const success = await exportResultsToCSV();
-    if (success) {
-      Alert.alert("Success", "Experiment data exported to CSV successfully.");
-    }
-  };
-
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.resultItem}>
       <View style={styles.itemContent}>
@@ -66,30 +38,12 @@ const HistoryScreen = () => {
   return (
     <View style={styles.container}>
       {results.length > 0 ? (
-        <>
-          <FlatList
-            data={results}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={renderItem}
-            contentContainerStyle={styles.listContent}
-          />
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.exportButton}
-              onPress={handleExportCSV}
-            >
-              <Text style={styles.buttonText}>Export to CSV</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={handleClearHistory}
-            >
-              <Text style={styles.buttonText}>Clear History</Text>
-            </TouchableOpacity>
-          </View>
-        </>
+        <FlatList
+          data={results}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContent}
+        />
       ) : (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>No history yet.</Text>
@@ -149,30 +103,6 @@ const styles = StyleSheet.create({
     fontSize: Number(16),
     color: '#777777'
   },
-  buttonContainer: {
-    padding: Number(20),
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  exportButton: {
-    backgroundColor: Colors.success,
-    flex: Number(0.48),
-    padding: Number(15),
-    borderRadius: Number(10),
-    alignItems: 'center',
-  },
-  clearButton: {
-    backgroundColor: Colors.error,
-    flex: Number(0.48),
-    padding: Number(15),
-    borderRadius: Number(10),
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: '700',
-    fontSize: Number(14),
-  }
 });
 
 export default HistoryScreen;

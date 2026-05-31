@@ -29,12 +29,6 @@ const HomeScreen = ({ navigation }: any) => {
             />
           ))}
         </View>
-
-        {/* AdMob Placeholder Requirement */}
-        <View style={styles.adBanner}>
-          <Text style={styles.adText}>ADVERTISEMENT BANNER</Text>
-          <Text style={styles.adSubtext}>(AdMob Integration Ready)</Text>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -47,20 +41,6 @@ const styles = StyleSheet.create({
   greeting: { fontSize: Number(28), fontWeight: '700', color: Colors.text },
   subtitle: { fontSize: Number(16), color: Colors.textLight },
   section: { marginBottom: Number(20) },
-  adBanner: {
-    backgroundColor: '#E0E0E0',
-    height: Number(60),
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: Number(8),
-    marginTop: Number(10),
-    borderStyle: 'dashed',
-    borderWidth: Number(1),
-    borderColor: '#999999'
-  },
-  adText: { color: '#666666', fontWeight: '700', fontSize: Number(12) },
-  adSubtext: { color: '#999999', fontSize: Number(10) }
 });
 
 export default HomeScreen;
