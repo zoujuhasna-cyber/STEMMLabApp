@@ -23,14 +23,6 @@ const allExperiments: Experiment[] = [
     category: 'Earth Science',
   },
   {
-    id: '3',
-    title: 'Sound Meter',
-    description: 'Measure ambient noise levels in decibels.',
-    icon: 'volume-high-outline',
-    route: 'SoundMeter',
-    category: 'Acoustics',
-  },
-  {
     id: '4',
     title: 'Breathing Tracker',
     description: 'Track your breathing rhythm using motion sensors.',

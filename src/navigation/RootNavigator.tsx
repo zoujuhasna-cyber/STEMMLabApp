@@ -7,7 +7,6 @@ import AuthScreen from '../screens/AuthScreen';
 import ReactionTimeScreen from '../screens/ReactionTimeScreen';
 import EarthquakeScreen from '../screens/EarthquakeScreen';
 import BreathingTrackerScreen from '../screens/BreathingTrackerScreen';
-import SoundMeterScreen from '../screens/SoundMeterScreen';
 import FlashlightScreen from '../screens/FlashlightScreen';
 import { Colors } from '../constants/Colors';
 
@@ -39,7 +38,6 @@ const RootNavigator = () => {
           <Stack.Screen name="ReactionTime" component={ReactionTimeScreen} options={{ title: 'Reaction Time' }} />
           <Stack.Screen name="Earthquake" component={EarthquakeScreen} options={{ title: 'Earthquake' }} />
           <Stack.Screen name="BreathingTracker" component={BreathingTrackerScreen} options={{ title: 'Breathing' }} />
-          <Stack.Screen name="SoundMeter" component={SoundMeterScreen} options={{ title: 'Sound Meter' }} />
           <Stack.Screen name="Flashlight" component={FlashlightScreen} options={{ title: 'Torch Lab' }} />
         </>
       ) : (
