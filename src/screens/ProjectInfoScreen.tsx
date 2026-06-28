@@ -5,34 +5,34 @@ import { Colors } from '../constants/Colors';
 const ProjectInfoScreen = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Technical Assessment Report</Text>
+      <Text style={styles.title}>Project Implementation Report</Text>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>1. Selected Advanced Feature (PoC)</Text>
-        <Text style={styles.point}>• Feature: Intelligent Text Filtering (Data Integrity).</Text>
-        <Text style={styles.point}>• Need: Ensures lab observations remain professional and valid.</Text>
-        <Text style={styles.point}>• Implementation: Uses the 'bad-words' NPM package for real-time lexical analysis.</Text>
+        <Text style={styles.sectionTitle}>1. Advanced Feature Prototype (PoC)</Text>
+        <Text style={styles.point}>• Feature: Intelligent Data Integrity Filter.</Text>
+        <Text style={styles.point}>• Implementation: Uses the 'bad-words' NPM package.</Text>
+        <Text style={styles.point}>• Need: Ensures scientific observations are professional before cloud sync.</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>2. Software Architecture</Text>
-        <Text style={styles.point}>• Frontend: React Native (Expo 56) with Fabric Renderer.</Text>
-        <Text style={styles.point}>• Offline Storage: Relational Database (SQLite) for reliability.</Text>
-        <Text style={styles.point}>• Cloud Backend: Firebase Firestore for real-time data sync.</Text>
+        <Text style={styles.sectionTitle}>2. Database & Firebase Integration</Text>
+        <Text style={styles.point}>• SQLite: Relational DB for reliable offline storage.</Text>
+        <Text style={styles.point}>• Firestore: Real-time cloud synchronization engine.</Text>
+        <Text style={styles.point}>• Auth: Secure scientist login gate using Firebase.</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>3. Critical Analysis</Text>
-        <Text style={styles.point}>• Feasibility: High. Pure JavaScript logic ensures cross-device stability.</Text>
-        <Text style={styles.point}>• Performance: Negligible overhead (O(n) complexity for text scanning).</Text>
-        <Text style={styles.point}>• Privacy: Data is processed locally before being synced to Firestore.</Text>
+        <Text style={styles.sectionTitle}>3. Device Capabilities & Sensors</Text>
+        <Text style={styles.point}>• Sensors: Accelerometer (Seismograph/Breathing) and Microphone.</Text>
+        <Text style={styles.point}>• GPS: Native Google Maps integration for field coordinates.</Text>
+        <Text style={styles.point}>• Logic: Background Task Manager for parallel processing.</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>4. Reflection & Limitations</Text>
-        <Text style={styles.point}>• Limitation: Native module availability in Expo Go SDK 56.</Text>
-        <Text style={styles.point}>• Workaround: Implemented Sanitized Numeric Styling for Android stability.</Text>
-        <Text style={styles.point}>• Future: Expand PoC to include multi-language translation support.</Text>
+        <Text style={styles.sectionTitle}>4. Reflection & Critical Analysis</Text>
+        <Text style={styles.point}>• Feasibility: High. Implemented sanitized styling for SDK 56 stability.</Text>
+        <Text style={styles.point}>• Limitation: Native module sync in experimental dev environments.</Text>
+        <Text style={styles.point}>• Solution: Implemented hardware fallbacks and strict numeric typing.</Text>
       </View>
 
       <Text style={styles.footer}>Lead Scientist Technical Summary - STEMM Lab</Text>

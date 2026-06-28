@@ -4,11 +4,15 @@ import { Colors } from '../constants/Colors';
 import ExperimentCard from '../components/ExperimentCard';
 import { Experiment } from '../types';
 
-const featuredExperiments: Experiment[] = [
-  { id: '1', title: 'Reaction Time', description: 'Test reflexes!', icon: 'timer-outline', route: 'ReactionTime', category: 'Physics' },
-  { id: '2', title: 'Earthquake Sensor', description: 'Measure vibrations.', icon: 'pulse-outline', route: 'Earthquake', category: 'Earth Science' },
-  { id: '4', title: 'Breathing Tracker', description: 'Track rhythm.', icon: 'heart-outline', route: 'BreathingTracker', category: 'Biology' },
-  { id: '5', title: 'Optical Lab', description: 'Hardware LED control for light tests.', icon: 'flash-outline', route: 'Flashlight', category: 'Optics' },
+const prototypeLabs: Experiment[] = [
+  {
+    id: '6',
+    title: 'Data Integrity Lab',
+    description: 'Advanced Lexical Filtering Prototype. Ensures scientific observations remain professional before cloud synchronization.',
+    icon: 'shield-checkmark-outline',
+    route: 'PoC',
+    category: 'Advanced PoC'
+  },
 ];
 
 const HomeScreen = ({ navigation }: any) => {
@@ -16,18 +20,26 @@ const HomeScreen = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Welcome Scientist!</Text>
-          <Text style={styles.subtitle}>Ready for an experiment?</Text>
+          <Text style={styles.greeting}>Prototype Dashboard</Text>
+          <Text style={styles.subtitle}>Proof of Concept: Data Integrity System</Text>
         </View>
 
         <View style={styles.section}>
-          {featuredExperiments.map((item) => (
+          {prototypeLabs.map((item) => (
             <ExperimentCard
               key={item.id}
               experiment={item}
               onPress={() => navigation.navigate(item.route)}
             />
           ))}
+        </View>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>Prototype Note:</Text>
+          <Text style={styles.infoText}>
+            This module demonstrates real-time text cleansing. It validates laboratory notes
+            locally on the device to maintain professional integrity standards.
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -37,10 +49,20 @@ const HomeScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: { flex: Number(1), backgroundColor: Colors.background },
   scrollContent: { padding: Number(20) },
-  header: { marginBottom: Number(20), marginTop: Number(10) },
-  greeting: { fontSize: Number(28), fontWeight: '700', color: Colors.text },
-  subtitle: { fontSize: Number(16), color: Colors.textLight },
+  header: { marginBottom: Number(30), marginTop: Number(10) },
+  greeting: { fontSize: Number(26), fontWeight: '700', color: Colors.primary },
+  subtitle: { fontSize: Number(14), color: Colors.textLight, marginTop: Number(5) },
   section: { marginBottom: Number(20) },
+  infoBox: {
+    marginTop: Number(20),
+    padding: Number(15),
+    backgroundColor: '#E3F2FD',
+    borderRadius: Number(12),
+    borderWidth: Number(1),
+    borderColor: '#BBDEFB'
+  },
+  infoTitle: { fontSize: Number(14), fontWeight: '700', color: '#1565C0', marginBottom: Number(5) },
+  infoText: { fontSize: Number(13), color: '#1E88E5', lineHeight: Number(18) }
 });
 
 export default HomeScreen;

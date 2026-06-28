@@ -4,10 +4,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '../services/firebaseConfig';
 import TabNavigator from './TabNavigator';
 import AuthScreen from '../screens/AuthScreen';
-import ReactionTimeScreen from '../screens/ReactionTimeScreen';
-import EarthquakeScreen from '../screens/EarthquakeScreen';
-import BreathingTrackerScreen from '../screens/BreathingTrackerScreen';
-import FlashlightScreen from '../screens/FlashlightScreen';
+import DataIntegrityScreen from '../screens/DataIntegrityScreen';
 import { Colors } from '../constants/Colors';
 
 const Stack = createNativeStackNavigator();
@@ -27,7 +24,7 @@ const RootNavigator = () => {
       screenOptions={{
         headerShadowVisible: false,
         headerStyle: { backgroundColor: Colors.card },
-        headerTitleStyle: { color: Colors.text, fontSize: Number(18) },
+        headerTitleStyle: { color: Colors.text, fontSize: 18 },
         headerTintColor: Colors.primary,
         headerTitleAlign: 'center',
       }}
@@ -35,13 +32,10 @@ const RootNavigator = () => {
       {user ? (
         <>
           <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
-          <Stack.Screen name="ReactionTime" component={ReactionTimeScreen} options={{ title: 'Reaction Time' }} />
-          <Stack.Screen name="Earthquake" component={EarthquakeScreen} options={{ title: 'Earthquake' }} />
-          <Stack.Screen name="BreathingTracker" component={BreathingTrackerScreen} options={{ title: 'Breathing' }} />
-          <Stack.Screen name="Flashlight" component={FlashlightScreen} options={{ title: 'Torch Lab' }} />
+          <Stack.Screen name="PoC" component={DataIntegrityScreen} options={{ title: 'Data Integrity Lab' }} />
         </>
       ) : (
-        <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'STEMM Lab Login' }} />
+        <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'Laboratory Login' }} />
       )}
     </Stack.Navigator>
   );
