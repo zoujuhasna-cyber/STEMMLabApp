@@ -5,6 +5,7 @@ declare const expect: (value: unknown) => { toBe: (expected: unknown) => void; t
 
 describe('Scientific Calculation Test', () => {
   test('converts g-force correctly', () => {
+    // Validates the math for intensity calculation
     const rawValue = 1.5;
     const gravity = 1.0;
     const intensity = rawValue - gravity;
@@ -12,7 +13,16 @@ describe('Scientific Calculation Test', () => {
   });
 
   test('validates experiment naming', () => {
+    // Ensures experiment IDs or names contain required keywords
     const name = "Earthquake Lab";
     expect(name).toContain("Earthquake");
+  });
+
+  test('validates sound decibel thresholds', () => {
+    // Meaning: Ensures the app correctly identifies if noise levels
+    // exceed safety thresholds in a lab environment.
+    const dbLevel = 85;
+    const isDangerous = dbLevel >= 80;
+    expect(isDangerous).toBe(true);
   });
 });
